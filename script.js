@@ -10,6 +10,8 @@ let isConnectedToServer = false;
 
 // Initialize WebSocket connection
 function initializeWebSocket() {
+    console.log('Attempting to initialize WebSocket connection...');
+    
     try {
         // Check if Socket.IO is available
         if (typeof io === 'undefined') {
@@ -18,27 +20,29 @@ function initializeWebSocket() {
             return;
         }
         
+        console.log('Socket.IO is available, creating connection...');
         socket = io();
         
         socket.on('connect', () => {
-            console.log('Connected to server');
+            console.log('✅ Connected to server successfully!');
             isConnectedToServer = true;
             showNotification('Connected to server - Real-time updates enabled!', 'success');
         });
         
         socket.on('disconnect', () => {
-            console.log('Disconnected from server');
+            console.log('❌ Disconnected from server');
             isConnectedToServer = false;
             showNotification('Disconnected from server', 'warning');
         });
         
         socket.on('connect_error', (error) => {
-            console.log('Connection error:', error);
+            console.log('❌ Connection error:', error);
             isConnectedToServer = false;
             showNotification('Server connection failed - Running in offline mode', 'warning');
         });
         
         socket.on('productsUpdated', (serverProducts) => {
+            console.log('📦 Products updated from server:', serverProducts.length, 'products');
             products = serverProducts;
             filteredProducts = [...products];
             loadProducts();
@@ -46,6 +50,7 @@ function initializeWebSocket() {
         });
         
         socket.on('productAdded', (newProduct) => {
+            console.log('➕ Product added:', newProduct.name);
             products.push(newProduct);
             filteredProducts = [...products];
             loadProducts();
@@ -54,6 +59,7 @@ function initializeWebSocket() {
         });
         
         socket.on('productUpdated', (updatedProduct) => {
+            console.log('✏️ Product updated:', updatedProduct.name);
             const index = products.findIndex(p => p.id === updatedProduct.id);
             if (index !== -1) {
                 products[index] = updatedProduct;
@@ -65,6 +71,7 @@ function initializeWebSocket() {
         });
         
         socket.on('productDeleted', (productId) => {
+            console.log('🗑️ Product deleted:', productId);
             products = products.filter(p => p.id !== productId);
             filteredProducts = [...products];
             loadProducts();
@@ -73,7 +80,7 @@ function initializeWebSocket() {
         });
         
     } catch (error) {
-        console.log('WebSocket initialization failed:', error);
+        console.log('❌ WebSocket initialization failed:', error);
         isConnectedToServer = false;
     }
 }
@@ -943,4 +950,5 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
 
