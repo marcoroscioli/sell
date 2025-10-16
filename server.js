@@ -230,13 +230,14 @@ app.get('/', (req, res) => {
 
 // WebSocket connection handling
 io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+    console.log('🔌 Client connected:', socket.id);
     
     // Send current products to newly connected client
     socket.emit('productsUpdated', products);
+    console.log('📤 Sent', products.length, 'products to client:', socket.id);
     
     socket.on('disconnect', () => {
-        console.log('Client disconnected:', socket.id);
+        console.log('🔌 Client disconnected:', socket.id);
     });
 });
 
@@ -249,4 +250,3 @@ server.listen(PORT, () => {
 });
 
 module.exports = { app, server, io };
-
