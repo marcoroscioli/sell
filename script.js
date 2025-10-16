@@ -11,6 +11,13 @@ let isConnectedToServer = false;
 // Initialize WebSocket connection
 function initializeWebSocket() {
     try {
+        // Check if Socket.IO is available
+        if (typeof io === 'undefined') {
+            console.log('Socket.IO not loaded, running in offline mode');
+            isConnectedToServer = false;
+            return;
+        }
+        
         socket = io();
         
         socket.on('connect', () => {
@@ -23,6 +30,12 @@ function initializeWebSocket() {
             console.log('Disconnected from server');
             isConnectedToServer = false;
             showNotification('Disconnected from server', 'warning');
+        });
+        
+        socket.on('connect_error', (error) => {
+            console.log('Connection error:', error);
+            isConnectedToServer = false;
+            showNotification('Server connection failed - Running in offline mode', 'warning');
         });
         
         socket.on('productsUpdated', (serverProducts) => {
@@ -60,7 +73,7 @@ function initializeWebSocket() {
         });
         
     } catch (error) {
-        console.log('WebSocket not available, running in offline mode');
+        console.log('WebSocket initialization failed:', error);
         isConnectedToServer = false;
     }
 }
@@ -430,7 +443,12 @@ function showAddProductForm() {
 
 function hideAddProductForm() {
     document.getElementById('add-product-form').style.display = 'none';
-    document.getElementById('add-product-form').reset();
+    // Reset form fields manually
+    document.getElementById('product-name').value = '';
+    document.getElementById('product-price').value = '';
+    document.getElementById('product-description').value = '';
+    document.getElementById('product-image').value = '';
+    document.getElementById('product-category').value = 'electronics';
 }
 
 function addProduct(event) {
@@ -925,3 +943,4 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
