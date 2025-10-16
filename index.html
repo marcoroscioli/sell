@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemstone Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-gem"></i> Gemstone Marketplace</h1>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search products..." onkeyup="searchProducts()">
+                <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link" onclick="showSection('products')">Products</a>
+                <a href="#" class="nav-link" onclick="showSection('cart')">Cart <span id="cart-count">0</span></a>
+                <a href="#" class="nav-link" onclick="showSection('about')">About</a>
+                <a href="#" class="nav-link" onclick="showSection('account')">Account</a>
+                <a href="#" class="nav-link" onclick="showSection('admin')">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Products Section -->
+        <section id="products-section" class="section active">
+            <div class="container">
+                <h2>Our Products</h2>
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section id="cart-section" class="section">
+            <div class="container">
+                <h2>Shopping Cart</h2>
+                <div class="cart-content">
+                    <div class="cart-items" id="cart-items">
+                        <!-- Cart items will be dynamically loaded here -->
+                    </div>
+                    <div class="cart-summary">
+                        <div class="total">
+                            <h3>Total: $<span id="cart-total">0.00</span></h3>
+                            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about-section" class="section">
+            <div class="container">
+                <h2>About Gemstone Marketplace</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>Welcome to Our Store!</h3>
+                        <p>Gemstone Marketplace is a child's business venture created with love and enthusiasm. We're excited to share our carefully curated collection of products with you!</p>
+                        
+                        <h3>Important Information</h3>
+                        <div class="disclaimer-box">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Business Notice</h4>
+                            <p><strong>This is a child's business.</strong> We're learning about entrepreneurship and e-commerce through this project.</p>
+                            
+                            <h4><i class="fas fa-truck"></i> Shipping Policy</h4>
+                            <p><strong>No shipping available.</strong> This is a demonstration website for learning purposes only.</p>
+                            
+                            <h4><i class="fas fa-undo"></i> Return Policy</h4>
+                            <p><strong>No returns accepted.</strong> All sales are final as this is an educational project.</p>
+                        </div>
+                        
+                        <h3>Our Mission</h3>
+                        <p>We believe in learning through doing! This marketplace helps us understand how businesses work, from managing inventory to serving customers. Every product is carefully selected to bring joy and value to our customers.</p>
+                        
+                        <h3>Contact Us</h3>
+                        <p>Have questions or feedback? We'd love to hear from you! This project is part of our learning journey, and your support means the world to us.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account Section -->
+        <section id="account-section" class="section">
+            <div class="container">
+                <!-- User Login/Register -->
+                <div id="user-auth" class="user-auth">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" onclick="showAuthTab('login')">Login</button>
+                        <button class="tab-btn" onclick="showAuthTab('register')">Register</button>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div id="user-login" class="auth-form active">
+                        <h2>User Login</h2>
+                        <form onsubmit="userLogin(event)">
+                            <div class="form-group">
+                                <label for="user-username">Username:</label>
+                                <input type="text" id="user-username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-password">Password:</label>
+                                <input type="password" id="user-password" required>
+                            </div>
+                            <button type="submit" class="auth-btn">Login</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Register Form -->
+                    <div id="user-register" class="auth-form">
+                        <h2>Create Account</h2>
+                        <form onsubmit="userRegister(event)">
+                            <div class="form-group">
+                                <label for="reg-username">Username:</label>
+                                <input type="text" id="reg-username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-email">Email:</label>
+                                <input type="email" id="reg-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-password">Password:</label>
+                                <input type="password" id="reg-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-confirm-password">Confirm Password:</label>
+                                <input type="password" id="reg-confirm-password" required>
+                            </div>
+                            <button type="submit" class="auth-btn">Create Account</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- User Dashboard -->
+                <div id="user-dashboard" class="user-dashboard" style="display: none;">
+                    <h2>Welcome, <span id="user-name"></span>!</h2>
+                    <div class="dashboard-content">
+                        <div class="user-info">
+                            <h3>Account Information</h3>
+                            <p><strong>Username:</strong> <span id="dashboard-username"></span></p>
+                            <p><strong>Email:</strong> <span id="dashboard-email"></span></p>
+                            <p><strong>Member since:</strong> <span id="member-since"></span></p>
+                        </div>
+                        
+                        <div class="search-history">
+                            <h3>Your Search History</h3>
+                            <div id="search-history-list">
+                                <!-- Search history will be loaded here -->
+                            </div>
+                            <button class="clear-history-btn" onclick="clearSearchHistory()">Clear History</button>
+                        </div>
+                        
+                        <div class="account-actions">
+                            <button class="logout-user-btn" onclick="userLogout()">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section id="admin-section" class="section">
+            <div class="container">
+                <!-- Login Form -->
+                <div id="admin-login" class="admin-login">
+                    <h2>Admin Login</h2>
+                    <form onsubmit="adminLogin(event)">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <button type="submit" class="login-btn">Login</button>
+                    </form>
+                </div>
+
+                <!-- Admin Panel -->
+                <div id="admin-panel" class="admin-panel" style="display: none;">
+                    <h2>Admin Panel</h2>
+                    <div class="admin-controls">
+                        <button class="add-product-btn" onclick="showAddProductForm()">Add New Product</button>
+                        <button class="logout-btn" onclick="adminLogout()">Logout</button>
+                    </div>
+                    
+                    <!-- Add Product Form -->
+                    <div id="add-product-form" class="product-form" style="display: none;">
+                        <h3>Add New Product</h3>
+                        <form onsubmit="addProduct(event)">
+                            <div class="form-group">
+                                <label for="product-name">Product Name:</label>
+                                <input type="text" id="product-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-price">Price:</label>
+                                <input type="number" id="product-price" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-description">Description:</label>
+                                <textarea id="product-description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-image">Image URL:</label>
+                                <input type="url" id="product-image" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-category">Category:</label>
+                                <select id="product-category" required>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="clothing">Clothing</option>
+                                    <option value="home">Home & Garden</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="books">Books</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="submit-btn">Add Product</button>
+                            <button type="button" class="cancel-btn" onclick="hideAddProductForm()">Cancel</button>
+                        </form>
+                    </div>
+
+                    <!-- Products Management -->
+                    <div class="admin-products">
+                        <h3>Manage Products</h3>
+                        <div class="admin-products-grid" id="admin-products-grid">
+                            <!-- Admin product cards will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Gemstone Marketplace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
